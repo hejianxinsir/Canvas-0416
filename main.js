@@ -4,10 +4,6 @@ var context = canvas.getContext('2d')
 autoSetCanvasSize()
 listenToUser()
 
-let pageWidth = document.documentElement.clientWidth
-let pageHeight = document.documentElement.clientHeight
-
-
 let using = false 
 let eraserEnabled = false
 let lastDot = {x: undefined, y: undefined}
@@ -72,12 +68,12 @@ function listenToUser(){
     // 触屏设备
     canvas.ontouchstart = function(a){
       using = true
+      console.log(a.touches[0].clientX)
       let x = a.touches[0].clientX
       let y = a.touches[0].clientY
-      lastDot = {x: clientX, y: clientY}
+      lastDot = {x: x, y: y}
     }
     canvas.ontouchmove = function(a){
-      console.log('mousemove')
       let x = a.touches[0].clientX
       let y = a.touches[0].clientY
       newDot = {x: x, y: y}
@@ -128,10 +124,10 @@ function listenToUser(){
 
 // 防止用户调整窗口大小
 function autoSetCanvasSize(){
-  resize()
   window.onresize = function(){
     resize()
   }
+  resize()
   function resize(){
     // 获取页面宽高，背下来下面两行代码
     var pageWidth = document.documentElement.clientWidth
@@ -177,10 +173,17 @@ eraser.onclick = function(){
   eraserEnabled = true
 }
 download.onclick = function(){
-  download.classList.add('active')
-  pen.classList.remove('active')
+  pen.classList.add('active')
   eraser.classList.remove('active')
   delete16.classList.remove('active')
+
+  var a = document.createElement('a')
+  var url = canvas.toDataURL('img/png')
+  document.body.appendChild(a)
+  a.href = url
+  a.download = '我的画作'
+  a.click()
+
 }
 delete16.onclick = function(){
   download.classList.remove('active')
@@ -188,7 +191,7 @@ delete16.onclick = function(){
   eraser.classList.remove('active')
 
   context.fillStyle = 'white'
-  context.fillRect(0,0,pageWidth, pageHeight)
+  context.fillRect(0,0,canvas.width, canvas.height)
 }
 
 // context.strokeStyle = 'red'

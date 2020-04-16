@@ -122,8 +122,6 @@ var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 autoSetCanvasSize();
 listenToUser();
-var pageWidth = document.documentElement.clientWidth;
-var pageHeight = document.documentElement.clientHeight;
 var using = false;
 var eraserEnabled = false;
 var lastDot = {
@@ -201,16 +199,16 @@ function listenToUser() {
     // 触屏设备
     canvas.ontouchstart = function (a) {
       using = true;
+      console.log(a.touches[0].clientX);
       var x = a.touches[0].clientX;
       var y = a.touches[0].clientY;
       lastDot = {
-        x: clientX,
-        y: clientY
+        x: x,
+        y: y
       };
     };
 
     canvas.ontouchmove = function (a) {
-      console.log('mousemove');
       var x = a.touches[0].clientX;
       var y = a.touches[0].clientY;
       newDot = {
@@ -274,11 +272,11 @@ function listenToUser() {
 
 
 function autoSetCanvasSize() {
-  resize();
-
   window.onresize = function () {
     resize();
   };
+
+  resize();
 
   function resize() {
     // 获取页面宽高，背下来下面两行代码
@@ -324,10 +322,15 @@ eraser.onclick = function () {
 };
 
 download.onclick = function () {
-  download.classList.add('active');
-  pen.classList.remove('active');
+  pen.classList.add('active');
   eraser.classList.remove('active');
   delete16.classList.remove('active');
+  var a = document.createElement('a');
+  var url = canvas.toDataURL('img/png');
+  document.body.appendChild(a);
+  a.href = url;
+  a.download = '我的画作';
+  a.click();
 };
 
 delete16.onclick = function () {
@@ -335,7 +338,7 @@ delete16.onclick = function () {
   pen.classList.add('active');
   eraser.classList.remove('active');
   context.fillStyle = 'white';
-  context.fillRect(0, 0, pageWidth, pageHeight);
+  context.fillRect(0, 0, canvas.width, canvas.height);
 }; // context.strokeStyle = 'red'
 // context.strokeRect(100,100,100,100)
 // context.fillStyle = 'blue'

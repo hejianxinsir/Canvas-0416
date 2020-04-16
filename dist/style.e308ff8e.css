@@ -5,6 +5,9 @@
 }
 canvas{
   background: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 /* ul 粗细相关 */

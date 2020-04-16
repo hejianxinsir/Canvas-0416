@@ -1,0 +1,50 @@
+*{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+*{
+  margin: 0; padding: 0;
+}
+canvas{
+  background: pink;
+}
+
+.btns{
+  position: fixed;
+  bottom: 5px;
+  left: 5px;
+}
+.btns > button{
+  padding: 3px 5px;
+}
+.btns > #brush{
+  display: none;
+}
+
+.btns.x > #brush{
+  display: inline-block;
+}
+.btns.x > #eraser{
+  display: none;
+}
+
+
+/* icon 相关 */
+.icon {
+  width: 1em; height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+.icon-wrap svg{
+  width: 30px; height: 30px;
+}
+.icon-wrap {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+

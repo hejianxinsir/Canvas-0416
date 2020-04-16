@@ -120,69 +120,160 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"main.js":[function(require,module,exports) {
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
-autoSetCanvasSize(canvas);
-listenToMouse(canvas);
+autoSetCanvasSize();
+listenToUser();
+var pageWidth = document.documentElement.clientWidth;
+var pageHeight = document.documentElement.clientHeight;
 var using = false;
 var eraserEnabled = false;
-var lastPoint = {
+var lastDot = {
   x: undefined,
   y: undefined
 };
-var newPoint = null;
+var newDot = {
+  x: undefined,
+  y: undefined
+};
+var lineWidth = 2;
+var pencolor = 'red'; // 四个按钮
+// 颜色
 
-function listenToMouse(canvas) {
-  canvas.onmousedown = function (a) {
-    var x = a.clientX;
-    var y = a.clientY;
-    using = true;
+black.onclick = function () {
+  pencolor = 'black';
+};
 
-    if (eraserEnabled) {
-      context.clearRect(x - 5, y - 5, 10, 10);
-    } else {
-      lastPoint = {
+brown.onclick = function () {
+  pencolor = 'brown';
+};
+
+orange.onclick = function () {
+  pencolor = 'orange';
+};
+
+green.onclick = function () {
+  pencolor = 'green';
+};
+
+blue.onclick = function () {
+  pencolor = 'blue';
+};
+
+purple.onclick = function () {
+  pencolor = 'purple';
+};
+
+yellow.onclick = function () {
+  pencolor = 'yellow';
+};
+
+lightgray.onclick = function () {
+  pencolor = 'lightgray';
+};
+
+lightblue.onclick = function () {
+  pencolor = 'lightblue';
+}; // 粗细
+
+
+thick.onclick = function () {
+  context.lineWidth = 10;
+  thick.classList.add('active');
+  middle.classList.remove('active');
+  thin.classList.remove('active');
+};
+
+middle.onclick = function () {
+  context.lineWidth = 6;
+  thick.classList.remove('active');
+  middle.classList.add('active');
+  thin.classList.remove('active');
+};
+
+thin.onclick = function () {
+  context.lineWidth = 2;
+  thick.classList.remove('active');
+  middle.classList.remove('active');
+  thin.classList.add('active');
+};
+
+function listenToUser() {
+  if (document.ontouchstart !== undefined) {
+    // 触屏设备
+    canvas.ontouchstart = function (a) {
+      using = true;
+      var x = a.touches[0].clientX;
+      var y = a.touches[0].clientY;
+      lastDot = {
+        x: clientX,
+        y: clientY
+      };
+    };
+
+    canvas.ontouchmove = function (a) {
+      console.log('mousemove');
+      var x = a.touches[0].clientX;
+      var y = a.touches[0].clientY;
+      newDot = {
         x: x,
         y: y
       };
-    }
-  };
 
-  canvas.onmousemove = function (a) {
-    var x = a.clientX;
-    var y = a.clientY;
+      if (eraserEnabled) {
+        if (using) {
+          context.clearRect(x - 10, y - 10, 20, 20);
+        }
+      } else {
+        if (using) {
+          drawLine(lastDot.x, lastDot.y, newDot.x, newDot.y);
+          lastDot = newDot;
+        }
+      }
+    };
 
-    if (!using) {
-      return;
-    }
+    canvas.ontouchend = function () {
+      using = false;
+    };
+  } else {
+    // 非触屏设备
+    canvas.onmousedown = function (a) {
+      using = true;
+      var clientX = a.clientX,
+          clientY = a.clientY;
+      lastDot = {
+        x: clientX,
+        y: clientY
+      };
+    };
 
-    if (eraserEnabled) {
-      context.clearRect(x - 5, y - 5, 10, 10);
-    } else {
-      newPoint = {
+    canvas.onmousemove = function (a) {
+      console.log('mousemove');
+      var x = a.clientX;
+      var y = a.clientY;
+      newDot = {
         x: x,
         y: y
       };
-      drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
-      lastPoint = newPoint;
-    }
-  };
 
-  canvas.onmouseup = function () {
-    using = false;
-  };
+      if (eraserEnabled) {
+        if (using) {
+          context.clearRect(x - 10, y - 10, 20, 20);
+        }
+      } else {
+        if (using) {
+          drawLine(lastDot.x, lastDot.y, newDot.x, newDot.y);
+          lastDot = newDot;
+        }
+      }
+    };
 
-  eraser.onclick = function () {
-    eraserEnabled = true;
-    btns.className = 'btns x';
-  };
-
-  brush.onclick = function () {
-    eraserEnabled = false;
-    btns.className = 'btns';
-  };
+    canvas.onmouseup = function () {
+      using = false;
+    };
+  }
 } // 防止用户调整窗口大小
 
 
-function autoSetCanvasSize(yyy) {
+function autoSetCanvasSize() {
   resize();
 
   window.onresize = function () {
@@ -193,28 +284,59 @@ function autoSetCanvasSize(yyy) {
     // 获取页面宽高，背下来下面两行代码
     var pageWidth = document.documentElement.clientWidth;
     var pageHeight = document.documentElement.clientHeight;
-    yyy.width = pageWidth;
-    yyy.height = pageHeight;
+    canvas.width = pageWidth;
+    canvas.height = pageHeight;
   }
 } // 画线
 
 
 function drawLine(x1, y1, x2, y2) {
   context.beginPath();
-  context.lineWidth = 1;
   context.moveTo(x1, y1);
   context.lineTo(x2, y2);
+  context.strokeStyle = pencolor;
   context.stroke();
   context.closePath();
 } // 画圆
 
 
-function drawCircle(x, y, radius) {
+function drawCircle(x, y) {
   context.beginPath();
-  context.arc(x, y, radius, 0, Math.PI * 2);
-  context.fillStyle = 'black';
+  context.arc(x, y, 1, 0, Math.PI * 2);
   context.fill();
-} // context.strokeStyle = 'red'
+  context.lineWidth = lineWidth;
+}
+
+pen.onclick = function () {
+  pen.classList.add('active');
+  eraser.classList.remove('active');
+  download.classList.remove('active');
+  delete16.classList.remove('active');
+  eraserEnabled = false;
+};
+
+eraser.onclick = function () {
+  eraser.classList.add('active');
+  pen.classList.remove('active');
+  download.classList.remove('active');
+  delete16.classList.remove('active');
+  eraserEnabled = true;
+};
+
+download.onclick = function () {
+  download.classList.add('active');
+  pen.classList.remove('active');
+  eraser.classList.remove('active');
+  delete16.classList.remove('active');
+};
+
+delete16.onclick = function () {
+  download.classList.remove('active');
+  pen.classList.add('active');
+  eraser.classList.remove('active');
+  context.fillStyle = 'white';
+  context.fillRect(0, 0, pageWidth, pageHeight);
+}; // context.strokeStyle = 'red'
 // context.strokeRect(100,100,100,100)
 // context.fillStyle = 'blue'
 // context.fillRect(100,100,100,100)
@@ -259,7 +381,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56624" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61072" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

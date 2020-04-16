@@ -6,30 +6,49 @@
 		initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>画板0416</title>
   <link rel="stylesheet" href="./style.css">
-  <!-- <script src="//at.alicdn.com/t/font_1574319_3huzt9iqe85.js"></script> -->
+  <script src="//at.alicdn.com/t/font_1574319_3huzt9iqe85.js"></script>
 </head>
 <body>
-  <!-- <div class="icon-wrap">
-    <svg class="icon" aria-hidden="true">
+
+  <canvas id="canvas" width=400 height=400>
+  </canvas>
+  <div class="icon-wrap">
+    <svg class="icon active" id="pen">
       <use xlink:href="#icon-entypopencil"></use>
     </svg>
-    <svg class="icon" aria-hidden="true">
+    <svg class="icon" id="eraser">
       <use xlink:href="#icon-eraser"></use>
     </svg>
-    <svg class="icon" aria-hidden="true">
+    <svg class="icon" id="download">
      <use xlink:href="#icon-download"></use>
     </svg>
-    <svg class="icon" aria-hidden="true">
+    <svg class="icon" id="delete16">
      <use xlink:href="#icon-16"></use>
     </svg>
   </div>
 
-  <canvas id="canvas"></canvas> -->
-  <canvas id="canvas" width=400 height=400></canvas>
-  <div class="btns" id=btns>
+  <ul>
+    <li id="thick"></li>
+    <li class="two" id="middle"></li>
+    <li class="three" id="thin"></li>
+  </ul>
+
+  <ol>
+    <li id="black"></li>
+    <li id="brown"></li>
+    <li id="orange"></li>
+    <li id="green"></li>
+    <li id="blue"></li>
+    <li id="purple"></li>
+    <li id="yellow"></li>
+    <li id="lightgray"></li>
+    <li id="lightblue"></li>
+  </ol>
+
+  <!-- <div class="btns" id=btns>
     <button id=eraser>eraser</button>
     <button id=brush>brush</button>
-  </div>
+  </div> -->
 
   <script src="./main.js"></script>
 </body>

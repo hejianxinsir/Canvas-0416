@@ -325,6 +325,7 @@ download.onclick = function () {
   pen.classList.add('active');
   eraser.classList.remove('active');
   delete16.classList.remove('active');
+  eraserEnabled = false;
   var a = document.createElement('a');
   var url = canvas.toDataURL('img/png');
   document.body.appendChild(a);
@@ -337,6 +338,7 @@ delete16.onclick = function () {
   download.classList.remove('active');
   pen.classList.add('active');
   eraser.classList.remove('active');
+  eraserEnabled = false;
   context.fillStyle = 'white';
   context.fillRect(0, 0, canvas.width, canvas.height);
 }; // context.strokeStyle = 'red'
@@ -384,7 +386,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61072" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62883" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
